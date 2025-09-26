@@ -164,6 +164,34 @@
             font-size: 1.2rem;
         }
 
+        .time-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 2px 2px 6px rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem 4rem;
+            border-radius: 20px;
+            border: 3px solid #ff0000;
+            animation: pulse 1s ease-in-out infinite alternate;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            from {
+                text-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 2px 2px 6px rgba(0, 0, 0, 0.8);
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            }
+            to {
+                text-shadow: 0 0 50px rgba(255, 0, 0, 1), 2px 2px 6px rgba(0, 0, 0, 0.8);
+                box-shadow: 0 0 40px rgba(255, 0, 0, 0.8);
+            }
+        }
+
         @media (max-width: 768px) {
             .time-inputs {
                 flex-direction: column;
@@ -190,6 +218,11 @@
             
             .time-value {
                 font-size: 3rem;
+            }
+            
+            .time-over {
+                font-size: 3rem;
+                padding: 1.5rem 2rem;
             }
         }
     </style>
@@ -239,6 +272,9 @@
             </div>
             <button id="resetBtn" class="reset-btn">Reset</button>
         </div>
+        
+        <!-- Time Over Message -->
+        <div id="timeOverMessage" class="time-over hidden">TIME OVER</div>
     </div>
     
     <script>
@@ -257,6 +293,7 @@
         const hoursDisplay = document.getElementById('hoursDisplay');
         const minutesDisplay = document.getElementById('minutesDisplay');
         const secondsDisplay = document.getElementById('secondsDisplay');
+        const timeOverMessage = document.getElementById('timeOverMessage');
 
         function formatTime(time) {
             return time.toString().padStart(2, '0');
@@ -295,7 +332,7 @@
                 
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
-                    alert('Time\'s up!');
+                    timeOverMessage.classList.remove('hidden');
                 }
             }, 1000);
         }
@@ -303,6 +340,7 @@
         function resetTimer() {
             clearInterval(timerInterval);
             timerScreen.classList.add('hidden');
+            timeOverMessage.classList.add('hidden');
             inputScreen.classList.remove('hidden');
             totalSeconds = 0;
         }
