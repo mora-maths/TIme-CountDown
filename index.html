@@ -192,37 +192,76 @@
             }
         }
 
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            font-family: 'Courier New', monospace;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .fullscreen-btn:active {
+            transform: scale(0.95);
+        }
+
         @media (max-width: 768px) {
             .time-inputs {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .timer-display {
                 flex-direction: column;
                 gap: 0.5rem;
             }
-            
+
             .time-separator {
                 display: none;
             }
-            
+
             .logo {
                 font-size: 3rem;
             }
-            
+
             .time-box {
                 min-width: 120px;
                 padding: 1.5rem;
             }
-            
+
             .time-value {
                 font-size: 3rem;
             }
-            
+
             .time-over {
                 font-size: 3rem;
                 padding: 1.5rem 2rem;
+            }
+
+            .fullscreen-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
             }
         }
     </style>
@@ -276,6 +315,9 @@
         <!-- Time Over Message -->
         <div id="timeOverMessage" class="time-over hidden">TIME OVER</div>
     </div>
+
+    <!-- Fullscreen Toggle Button -->
+    <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle Fullscreen">⛶</button>
     
     <script>
         let timerInterval;
@@ -294,6 +336,7 @@
         const minutesDisplay = document.getElementById('minutesDisplay');
         const secondsDisplay = document.getElementById('secondsDisplay');
         const timeOverMessage = document.getElementById('timeOverMessage');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
 
         function formatTime(time) {
             return time.toString().padStart(2, '0');
@@ -345,8 +388,21 @@
             totalSeconds = 0;
         }
 
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen().catch(err => {
+                    console.log(`Error attempting to exit fullscreen: ${err.message}`);
+                });
+            }
+        }
+
         startBtn.addEventListener('click', startTimer);
         resetBtn.addEventListener('click', resetTimer);
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
 
         // Allow Enter key to start timer
         document.addEventListener('keypress', (e) => {
